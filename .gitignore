@@ -5,6 +5,8 @@
 *.swp
 .DS_Store
 .atom/
+.idea
+.dart_tool
 .build/
 .buildlog/
 .history
