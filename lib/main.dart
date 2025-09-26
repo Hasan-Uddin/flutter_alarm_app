@@ -42,6 +42,7 @@ Future<void> main() async {
   runApp(MyApp(isViewed: isViewed));
 }
 
+
 class MyApp extends StatelessWidget {
   final bool? isViewed;
   const MyApp({super.key, this.isViewed});
