@@ -27,7 +27,7 @@ jobs:
       - run: flutter pub get
       - run: flutter build web --release --base-href "/flutter_alarm_app/"
 
-      # ➡️ ADD THIS STEP ⬅️
+
       - name: Create .nojekyll file to disable Jekyll processing
         run: touch build/web/.nojekyll
 
