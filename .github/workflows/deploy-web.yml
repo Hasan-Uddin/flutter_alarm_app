@@ -1,47 +1,60 @@
-name: Build & Deploy Flutter Web to GitHub Pages
+name: Build & Deploy Flutter Web
 
 on:
   push:
     branches:
       - main
-  # Add this to allow manual re-runs from the GitHub UI for testing
+  # Allows you to run the workflow manually from the Actions tab
   workflow_dispatch:
 
 permissions:
-  contents: read      # Read permission for checkout
+  contents: read      # Read permission for actions/checkout
   pages: write        # Write permission for deployment
-  id-token: write     # Required for deployment
+  id-token: write     # Required for actions/deploy-pages
 
 jobs:
+  # The job that builds the Flutter app
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4 # Changed to v4
-
+      - uses: actions/checkout@v4
+      
+      # 1. Setup Flutter
       - name: Set up Flutter
         uses: subosito/flutter-action@v2
         with:
           flutter-version: '3.35.4'
 
-      - run: flutter config --enable-web
-      - run: flutter pub get
-      - run: flutter build web --release --base-href "/flutter_alarm_app/"
-      
+      # 2. Build Flutter Web
+      - name: Build Flutter Web
+        run: |
+          flutter config --enable-web
+          flutter pub get
+          flutter build web --release --base-href "/flutter_alarm_app/"
+
+      # 3. Create .nojekyll (CRITICAL: Tells GitHub this is a static site)
       - name: Create .nojekyll file
         run: touch build/web/.nojekyll
 
-      # 1. Setup Pages Environment
-      - name: Setup Pages
-        uses: actions/configure-pages@v5 
-
-      # 2. Upload the Flutter build artifact
+      # 4. Upload artifact
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          # This must match your build output directory
-          path: './build/web' 
+          path: './build/web' # Explicitly upload the Flutter output directory
 
-      # 3. Deploy the artifact to GitHub Pages
+  # The job that deploys the artifact
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    needs: build # Wait for the build job to complete
+    steps:
+      # 1. Setup Pages (configures the deployment environment)
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+      
+      # 2. Deploy the uploaded artifact
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
