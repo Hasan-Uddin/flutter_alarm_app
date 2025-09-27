@@ -23,6 +23,7 @@
 
     cupertino_icons: ^1.0.8
     audioplayers: ^6.5.1
+    flutter_background_service: ^5.0.5
     shared_preferences: ^2.5.3
     flutter_local_notifications: ^19.4.2
     timezone: ^0.10.1
