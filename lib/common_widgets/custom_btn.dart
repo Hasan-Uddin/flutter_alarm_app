@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_alarm_app/constants/colors.dart';
 
 class CustomBtn extends StatelessWidget {
   final String? text;

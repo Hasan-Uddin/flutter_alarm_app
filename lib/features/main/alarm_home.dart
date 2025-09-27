@@ -1,11 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_alarm_app/constants/colors.dart';
 import 'package:flutter_alarm_app/helpers/alarm.dart';
 import 'package:flutter_alarm_app/main.dart';
 import 'package:flutter_alarm_app/helpers/services/storage_service.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:timezone/timezone.dart' as tz;
+import 'package:flutter_background_service/flutter_background_service.dart';
 
 class AlarmHome extends StatefulWidget {
   const AlarmHome({super.key});
@@ -21,17 +19,8 @@ class _AlarmHomeState extends State<AlarmHome> {
   @override
   void initState() {
     super.initState();
-    _requestPermissions();
     _loadLocation();
     _loadAlarms();
-  }
-
-  Future<void> _requestPermissions() async {
-    await flutterLocNotifyPlugin
-        .resolvePlatformSpecificImplementation<
-          AndroidFlutterLocalNotificationsPlugin
-        >()
-        ?.requestNotificationsPermission();
   }
 
   Future<void> _saveAlarms() async {
@@ -57,29 +46,17 @@ class _AlarmHomeState extends State<AlarmHome> {
   }
 
   Future<void> _scheduleAlarm(Alarm alarm) async {
-    final scheduledTZDateTime = tz.TZDateTime.from(
-      alarm.alarmDateTime,
-      tz.local,
-    );
+    final service = FlutterBackgroundService();
+    var isRunning = await service.isRunning();
+    if (!isRunning) {
+      service.startService();
+    }
 
-    await flutterLocNotifyPlugin.zonedSchedule(
-      alarm.id, // Use the alarm's unique id
+    await notificationService.scheduleAlarm(
+      alarm.id,
       'Alarm',
       'It\'s time: ${alarm.time}',
-      scheduledTZDateTime,
-      const NotificationDetails(
-        android: AndroidNotificationDetails(
-          'alarm_channel',
-          'Alarms',
-          channelDescription: 'Alarm notifications',
-          importance: Importance.max,
-          priority: Priority.high,
-          icon: '@mipmap/ic_launcher',
-        ),
-      ),
-      androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
-      matchDateTimeComponents:
-          DateTimeComponents.time, // For daily repeating alarms
+      alarm.alarmDateTime,
     );
   }
 
@@ -118,7 +95,9 @@ class _AlarmHomeState extends State<AlarmHome> {
   }
 
   Future<void> _cancelAlarm(int id) async {
-    await flutterLocNotifyPlugin.cancel(id);
+    await notificationService.cancelAlarm(id);
+    final service = FlutterBackgroundService();
+    service.invoke('stopAlarm');
   }
 
   @override
