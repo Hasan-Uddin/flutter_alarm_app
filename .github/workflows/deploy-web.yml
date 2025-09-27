@@ -4,19 +4,19 @@ on:
   push:
     branches:
       - main
+  # Add this to allow manual re-runs from the GitHub UI for testing
+  workflow_dispatch:
 
 permissions:
-  contents: write # Allows the action to push to the repository (create/update gh-pages branch)
-  pages: write    # Allows the action to trigger a Pages deployment (modern method)
-  id-token: write # Required for deployment via the new GitHub Pages Action
-
+  contents: read      # Read permission for checkout
+  pages: write        # Write permission for deployment
+  id-token: write     # Required for deployment
 
 jobs:
   build:
     runs-on: ubuntu-latest
-
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4 # Changed to v4
 
       - name: Set up Flutter
         uses: subosito/flutter-action@v2
@@ -26,14 +26,24 @@ jobs:
       - run: flutter config --enable-web
       - run: flutter pub get
       - run: flutter build web --release --base-href "/flutter_alarm_app/"
-
-
-      - name: Create .nojekyll file to disable Jekyll processing
+      
+      # ➡️ THE CRITICAL FIX: Add .nojekyll to ensure GitHub treats it as a static site ⬅️
+      - name: Create .nojekyll file
         run: touch build/web/.nojekyll
 
-      - name: Deploy to GitHub Pages
-        uses: peaceiris/actions-gh-pages@v3
-        
+
+      # 1. Setup Pages Environment
+      - name: Setup Pages
+        uses: actions/configure-pages@v5 
+
+      # 2. Upload the Flutter build artifact
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./build/web
+          # This must match your build output directory
+          path: './build/web' 
+
+      # 3. Deploy the artifact to GitHub Pages
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
