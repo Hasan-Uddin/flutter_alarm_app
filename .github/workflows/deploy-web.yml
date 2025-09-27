@@ -27,10 +27,8 @@ jobs:
       - run: flutter pub get
       - run: flutter build web --release --base-href "/flutter_alarm_app/"
       
-      # ➡️ THE CRITICAL FIX: Add .nojekyll to ensure GitHub treats it as a static site ⬅️
       - name: Create .nojekyll file
         run: touch build/web/.nojekyll
-
 
       # 1. Setup Pages Environment
       - name: Setup Pages
