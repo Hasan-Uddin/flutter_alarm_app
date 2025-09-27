@@ -1,7 +1,6 @@
 ## flutter_alarm_app
 **A flutter project to demonstrate my problem-solving skills**
 
-
 ## Demo
 [🌐 View Live Web App](https://hasan-uddin.github.io/flutter_alarm_app/)
 - note:
