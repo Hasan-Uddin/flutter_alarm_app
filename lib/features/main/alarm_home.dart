@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_alarm_app/common_widgets/linear_grad.dart';
 import 'package:flutter_alarm_app/helpers/alarm.dart';
 import 'package:flutter_alarm_app/main.dart';
 import 'package:flutter_alarm_app/helpers/services/storage_service.dart';
@@ -23,6 +24,8 @@ class _AlarmHomeState extends State<AlarmHome> {
     _loadAlarms();
   }
 
+  // Functions-start
+
   Future<void> _saveAlarms() async {
     await _storageService.saveAlarms(alarms);
   }
@@ -41,7 +44,7 @@ class _AlarmHomeState extends State<AlarmHome> {
   Future<void> _loadLocation() async {
     final location = await _storageService.getUserLocation();
     setState(() {
-      _userLocation = location ?? 'Location not set';
+      _userLocation = location ?? 'Add your location';
     });
   }
 
@@ -99,165 +102,179 @@ class _AlarmHomeState extends State<AlarmHome> {
     final service = FlutterBackgroundService();
     service.invoke('stopAlarm');
   }
+  // Functions-end
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      floatingActionButton: FloatingActionButton(
-        onPressed: set_alarm,
-        shape: const CircleBorder(),
-        backgroundColor: Theme.of(context).colorScheme.primary,
-        foregroundColor: Colors.white,
-        child: const Icon(Icons.add), // Icon displayed on the button
+      floatingActionButton: Padding(
+        padding: const EdgeInsets.only(bottom: 30, right: 5),
+        child: FloatingActionButton(
+          onPressed: set_alarm,
+          shape: const CircleBorder(),
+          backgroundColor: Theme.of(context).colorScheme.primary,
+          foregroundColor: Colors.white,
+          child: const Icon(
+            Icons.add,
+            size: 30,
+          ), // Icon displayed on the button
+        ),
       ),
-      body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            SizedBox(height: MediaQuery.of(context).size.height * 0.10),
+      body: LinearGrad(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              SizedBox(height: MediaQuery.of(context).size.height * 0.10),
 
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  "Selected Location",
-                  style: TextStyle(fontSize: 20, color: Colors.white),
-                ),
-                const SizedBox(height: 8),
-                Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 16,
-                    vertical: 12,
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    "Selected Location",
+                    style: TextStyle(fontSize: 20, color: Colors.white),
                   ),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(69),
-                    border: Border.all(color: Colors.white, width: 1.5),
-                  ),
-                  child: Row(
-                    children: [
-                      Icon(Icons.location_on_outlined, color: Colors.grey[300]),
-                      const SizedBox(width: 8),
-                      Expanded(
-                        child: Text(
-                          _userLocation ?? 'Location not set',
-                          style: const TextStyle(
-                            color: Color.fromARGB(255, 201, 201, 201),
-                            fontSize: 16,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                SizedBox(height: 12),
-              ],
-            ),
-
-            SizedBox(height: 20),
-            Text(
-              'Alarms',
-              style: TextStyle(
-                fontSize: 20,
-                color: Colors.white,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            SizedBox(height: 10),
-            Expanded(
-              child: ListView.builder(
-                itemCount: alarms.length,
-                itemBuilder: (context, index) {
-                  final alarm = alarms[index];
-                  return Dismissible(
-                    key: Key(alarm.id.toString()),
-                    onDismissed: (direction) async {
-                      await _cancelAlarm(alarm.id);
-                      setState(() {
-                        alarms.removeAt(index);
-                      });
-                      await _saveAlarms();
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          content: Text('${alarm.time} alarm dismissed'),
-                        ),
-                      );
-                    },
-                    background: Container(
-                      color: Colors.red[400],
-                      alignment: Alignment.centerRight,
-                      padding: const EdgeInsets.only(right: 20.0),
-                      child: const Icon(Icons.delete, color: Colors.white),
+                  const SizedBox(height: 8),
+                  Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 16,
+                      vertical: 12,
                     ),
-                    child: Container(
-                      margin: EdgeInsets.symmetric(vertical: 6),
-                      padding: EdgeInsets.symmetric(
-                        horizontal: 12,
-                        vertical: 8,
-                      ),
-                      decoration: BoxDecoration(
-                        color: const Color.fromARGB(75, 66, 66, 66),
-                        borderRadius: BorderRadius.circular(69),
-                      ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Expanded(
-                            child: Container(
-                              margin: const EdgeInsets.symmetric(
-                                horizontal: 20,
-                                vertical: 5,
-                              ),
-                              child: Row(
-                                //crossAxisAlignment: CrossAxisAlignment.start,
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Text(
-                                    alarm.time,
-                                    style: const TextStyle(
-                                      fontSize: 18,
-                                      color: Colors.white,
-                                    ),
-                                  ),
-                                  Text(
-                                    alarm.date,
-                                    style: const TextStyle(
-                                      fontSize: 18,
-                                      color: Color.fromARGB(110, 255, 255, 255),
-                                    ),
-                                  ),
-                                ],
-                              ),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(69),
+                      border: Border.all(color: Colors.white, width: 1.5),
+                    ),
+                    child: Row(
+                      children: [
+                        Icon(
+                          Icons.location_on_outlined,
+                          color: Colors.grey[300],
+                        ),
+                        const SizedBox(width: 8),
+                        Expanded(
+                          child: Text(
+                            _userLocation!,
+                            style: const TextStyle(
+                              color: Color.fromARGB(146, 201, 201, 201),
+                              fontSize: 16,
                             ),
                           ),
-                          CupertinoSwitch(
-                            value: alarm.isActive,
-                            onChanged: (val) async {
-                              setState(() {
-                                alarm.isActive = val;
-                              });
-                              if (alarm.isActive) {
-                                await _scheduleAlarm(alarm);
-                              } else {
-                                await _cancelAlarm(alarm.id);
-                              }
-                              await _saveAlarms();
-                            },
-                            inactiveTrackColor: Colors.white,
-                            activeTrackColor: Theme.of(
-                              context,
-                            ).colorScheme.primary,
-                            inactiveThumbColor: Colors.black,
-                          ),
-                        ],
-                      ),
+                        ),
+                      ],
                     ),
-                  );
-                },
+                  ),
+                  SizedBox(height: 12),
+                ],
               ),
-            ),
-          ],
+
+              SizedBox(height: 20),
+              Text(
+                'Alarms',
+                style: TextStyle(fontSize: 20, color: Colors.white),
+              ),
+              SizedBox(height: 10),
+              Expanded(
+                child: ListView.builder(
+                  itemCount: alarms.length,
+                  itemBuilder: (context, index) {
+                    final alarm = alarms[index];
+
+                    // swipe all the way to left/right to delete
+                    return Dismissible(
+                      key: Key(alarm.id.toString()),
+                      onDismissed: (direction) async {
+                        await _cancelAlarm(alarm.id);
+                        setState(() {
+                          alarms.removeAt(index);
+                        });
+                        await _saveAlarms();
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text('${alarm.time} alarm dismissed'),
+                          ),
+                        );
+                      },
+                      background: Container(
+                        color: Colors.red[400],
+                        alignment: Alignment.centerRight,
+                        padding: const EdgeInsets.only(right: 20.0),
+                        child: const Icon(Icons.delete, color: Colors.white),
+                      ),
+                      child: Container(
+                        margin: EdgeInsets.symmetric(vertical: 6),
+                        padding: EdgeInsets.symmetric(
+                          horizontal: 12,
+                          vertical: 8,
+                        ),
+                        decoration: BoxDecoration(
+                          color: const Color.fromARGB(75, 66, 66, 66),
+                          borderRadius: BorderRadius.circular(69),
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Expanded(
+                              child: Container(
+                                margin: const EdgeInsets.symmetric(
+                                  horizontal: 20,
+                                  vertical: 5,
+                                ),
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text(
+                                      alarm.time,
+                                      style: const TextStyle(
+                                        fontSize: 18,
+                                        color: Colors.white,
+                                      ),
+                                    ),
+                                    Text(
+                                      alarm.date,
+                                      style: const TextStyle(
+                                        fontSize: 18,
+                                        color: Color.fromARGB(
+                                          110,
+                                          255,
+                                          255,
+                                          255,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                            CupertinoSwitch(
+                              value: alarm.isActive,
+                              onChanged: (val) async {
+                                setState(() {
+                                  alarm.isActive = val;
+                                });
+                                if (alarm.isActive) {
+                                  await _scheduleAlarm(alarm);
+                                } else {
+                                  await _cancelAlarm(alarm.id);
+                                }
+                                await _saveAlarms();
+                              },
+                              inactiveTrackColor: Colors.white,
+                              activeTrackColor: Theme.of(
+                                context,
+                              ).colorScheme.primary,
+                              inactiveThumbColor: Colors.black,
+                            ),
+                          ],
+                        ),
+                      ),
+                    );
+                  },
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );

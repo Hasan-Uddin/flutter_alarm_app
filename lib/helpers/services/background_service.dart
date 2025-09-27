@@ -1,10 +1,8 @@
 import 'dart:async';
 import 'dart:ui';
-
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter_alarm_app/helpers/services/notification_service.dart';
 import 'package:flutter_background_service/flutter_background_service.dart';
-import 'package:flutter_background_service_android/flutter_background_service_android.dart';
 
 Future<void> initializeService() async {
   final service = FlutterBackgroundService();
@@ -14,10 +12,7 @@ Future<void> initializeService() async {
       isForegroundMode: true,
       autoStart: true,
     ),
-    iosConfiguration: IosConfiguration(
-      onForeground: onStart,
-      autoStart: true,
-    ),
+    iosConfiguration: IosConfiguration(onForeground: onStart, autoStart: true),
   );
 }
 

@@ -32,8 +32,9 @@ class _OnbordingState extends State<OnboardingScreen> {
       return controller;
     });
 
-    Future.wait(_videoControllers.map((controller) => controller.initialize()))
-        .then((_) {
+    Future.wait(
+      _videoControllers.map((controller) => controller.initialize()),
+    ).then((_) {
       if (mounted) {
         setState(() {});
         _playCurrentVideo(currentIndex);
@@ -143,7 +144,7 @@ class _OnbordingState extends State<OnboardingScreen> {
                     // Color of active dot
                     activeDotColor: Theme.of(context).colorScheme.secondary,
                     // Color of inactive dot
-                    dotColor: Theme.of(context).colorScheme.tertiary,
+                    dotColor: Color.fromARGB(255, 44, 51, 113),
                     spacing: 10,
                   ),
                 ),

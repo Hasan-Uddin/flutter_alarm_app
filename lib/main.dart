@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_alarm_app/features/location/location_screen.dart';
 import 'package:flutter_alarm_app/features/onboarding/onboarding_screen.dart';
@@ -19,15 +20,20 @@ void onDidReceiveNotificationResponse(
 ) async {
   if (notificationResponse.payload == 'stop_alarm' ||
       notificationResponse.actionId == 'stop_alarm') {
-    final service = FlutterBackgroundService();
-    service.invoke('stopAlarm');
+    if (!kIsWeb) {
+      final service = FlutterBackgroundService();
+      service.invoke('stopAlarm');
+    }
   }
 }
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   tz.initializeTimeZones();
-  await initializeService();
+  if (!kIsWeb) {
+    // avoid if running on web
+    await initializeService();
+  }
 
   await initNotifications();
 

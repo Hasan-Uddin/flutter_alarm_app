@@ -1,4 +1,4 @@
-class DirStrings {
+class DirPath {
   // OnBoarding images Dirs
   static const onBoarding_vid_1 = "assets/videos/video_1.mp4";
   static const onBoarding_vid_2 = "assets/videos/video_2.mp4";
