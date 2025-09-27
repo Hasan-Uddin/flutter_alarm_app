@@ -5,6 +5,11 @@ on:
     branches:
       - main
 
+permissions:
+  contents: write # Allows the action to push to the repository (create/update gh-pages branch)
+  pages: write    # Allows the action to trigger a Pages deployment (modern method)
+  id-token: write # Required for deployment via the new GitHub Pages Action
+
 
 jobs:
   build:
@@ -16,11 +21,11 @@ jobs:
       - name: Set up Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: '3.35.3'
+          flutter-version: '3.35.4'
 
       - run: flutter config --enable-web
       - run: flutter pub get
-      - run: flutter build web --release --base-href "flutter_alarm_app"
+      - run: flutter build web --release --base-href "/flutter_alarm_app/"
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
