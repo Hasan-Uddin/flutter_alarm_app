@@ -1,12 +1,6 @@
 ## flutter_alarm_app
 **A flutter project to demonstrate my problem-solving skills**
 
-## Demo
-[🌐 View Live Web App](https://hasan-uddin.github.io/flutter_alarm_app/)
-- note:
-  1. Onboarding screen loads only once. Delete cookies to initialise again.
-  2. The app was made heavily focused and tested on Android, so some functionality might not work for the web
-
 ## Objectives
 - To implement Onboarding screens (once-first-time)
 - To implement the Location permission prompt
