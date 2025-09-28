@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 
 class CustomBtnImg extends StatelessWidget {
   final String text;
-  void Function()? onPressed;
+  final void Function()? onPressed;
   final Icon icon;
   final double marginVer;
-  CustomBtnImg({
+  const CustomBtnImg({
     super.key,
     required this.text,
     required this.icon,

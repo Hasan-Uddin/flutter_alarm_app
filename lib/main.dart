@@ -4,7 +4,6 @@ import 'package:flutter_alarm_app/features/location/location_screen.dart';
 import 'package:flutter_alarm_app/features/onboarding/onboarding_screen.dart';
 import 'package:flutter_alarm_app/helpers/dark_theme.dart';
 import 'package:flutter_alarm_app/helpers/services/audio_service.dart';
-import 'package:flutter_alarm_app/helpers/services/background_service.dart';
 import 'package:flutter_alarm_app/helpers/services/notification_service.dart';
 import 'package:flutter_alarm_app/helpers/services/storage_service.dart';
 import 'package:flutter/services.dart';
@@ -30,10 +29,6 @@ void onDidReceiveNotificationResponse(
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   tz.initializeTimeZones();
-  if (!kIsWeb) {
-    // avoid if running on web
-    await initializeService();
-  }
 
   await initNotifications();
 

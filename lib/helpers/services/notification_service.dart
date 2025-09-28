@@ -21,9 +21,23 @@ class NotificationService {
 
     const InitializationSettings initializationSettings =
         InitializationSettings(
-          android: initializationSettingsAndroid,
-          iOS: initializationSettingsIOS,
-        );
+      android: initializationSettingsAndroid,
+      iOS: initializationSettingsIOS,
+    );
+
+    final AndroidNotificationChannel channel = const AndroidNotificationChannel(
+      'alarm_channel', // id
+      'Alarm Channel', // title
+      description: 'Channel for alarm notifications', // description
+      importance: Importance.max,
+      sound: RawResourceAndroidNotificationSound('alarm'),
+      audioAttributesUsage: AudioAttributesUsage.alarm,
+    );
+
+    await flutterLocalNotificationsPlugin
+        .resolvePlatformSpecificImplementation<
+            AndroidFlutterLocalNotificationsPlugin>()
+        ?.createNotificationChannel(channel);
 
     await flutterLocalNotificationsPlugin.initialize(
       initializationSettings,
@@ -38,20 +52,19 @@ class NotificationService {
   }) async {
     const AndroidNotificationDetails androidPlatformChannelSpecifics =
         AndroidNotificationDetails(
-          'alarm_channel',
-          'Alarm Channel',
-          channelDescription: 'Channel for alarm notifications',
-          importance: Importance.max,
-          priority: Priority.high,
-          sound: RawResourceAndroidNotificationSound('alarm'),
-          actions: [
-            AndroidNotificationAction(
-              'stop_alarm',
-              'Stop',
-              cancelNotification: true,
-            ),
-          ],
-        );
+      'alarm_channel',
+      'Alarm Channel',
+      channelDescription: 'Channel for alarm notifications',
+      importance: Importance.max,
+      priority: Priority.high,
+      actions: [
+        AndroidNotificationAction(
+          'stop_alarm',
+          'Stop',
+          cancelNotification: true,
+        ),
+      ],
+    );
 
     const NotificationDetails platformChannelSpecifics = NotificationDetails(
       android: androidPlatformChannelSpecifics,
@@ -84,7 +97,6 @@ class NotificationService {
           channelDescription: 'Channel for alarm notifications',
           importance: Importance.max,
           priority: Priority.high,
-          sound: RawResourceAndroidNotificationSound('alarm'),
           actions: [
             AndroidNotificationAction(
               'stop_alarm',

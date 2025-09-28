@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 class LinearGrad extends StatelessWidget {
   final Widget? child;
-  LinearGrad({super.key, this.child});
+  const LinearGrad({super.key, this.child});
 
   @override
   Widget build(BuildContext context) {

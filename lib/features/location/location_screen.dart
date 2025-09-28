@@ -28,14 +28,15 @@ class _LocationScreenState extends State<LocationScreen> {
 
   Future<void> _checkExistingLocationAndProceed() async {
     final existingLocation = await _storageService.getUserLocation();
-    if (existingLocation != null && mounted) {
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => const AlarmHome()),
-      );
-    }
-    Future.delayed(const Duration(milliseconds: 800), () async {
-      await _fetchAndSaveLocation();
+    Future.delayed(const Duration(milliseconds: 600), () async {
+      await _fetchAndSaveLocation().whenComplete(() {
+        if (existingLocation != null && mounted) {
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => const AlarmHome()),
+          );
+        }
+      });
     });
   }
 
@@ -97,10 +98,9 @@ class _LocationScreenState extends State<LocationScreen> {
                     ],
                   ),
                 ),
-
                 SizedBox(height: 10),
                 Container(
-                  margin: EdgeInsets.all(20),
+                  margin: EdgeInsets.symmetric(horizontal: 40, vertical: 20),
                   child: LayoutBuilder(
                     builder: (context, constraints) {
                       // Use LayoutBuilder to get the available width and calculate the radius.
@@ -115,31 +115,27 @@ class _LocationScreenState extends State<LocationScreen> {
                   ),
                 ),
                 SizedBox(height: 10),
-                Container(
-                  //height: 60,
-                  //width: MediaQuery.of(context).size.width * 1,
-                  child: Column(
-                    children: [
-                      CustomBtnImg(
-                        text: "Use Current Location",
-                        icon: const Icon(Icons.location_on_outlined),
-                        marginVer: 10,
-                        onPressed: _checkExistingLocationAndProceed,
-                      ),
-                      CustomBtn(
-                        text: "Home",
-                        marginVer: 10,
-                        onPressed: () {
-                          Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => const AlarmHome(),
-                            ),
-                          );
-                        },
-                      ),
-                    ],
-                  ),
+                Column(
+                  children: [
+                    CustomBtnImg(
+                      text: "Use Current Location",
+                      icon: const Icon(Icons.location_on_outlined),
+                      marginVer: 10,
+                      onPressed: _checkExistingLocationAndProceed,
+                    ),
+                    CustomBtn(
+                      text: "Home",
+                      marginVer: 10,
+                      onPressed: () {
+                        Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const AlarmHome(),
+                          ),
+                        );
+                      },
+                    ),
+                  ],
                 ),
                 SizedBox(height: MediaQuery.of(context).size.height * 0.10),
               ],

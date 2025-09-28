@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 
 class CustomBtn extends StatelessWidget {
   final String? text;
-  void Function()? onPressed;
+  final void Function()? onPressed;
   final double marginVer;
-  CustomBtn({
+  const CustomBtn({
     super.key,
     required this.text,
     required this.onPressed,

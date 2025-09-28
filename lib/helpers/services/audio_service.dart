@@ -1,13 +1,15 @@
-import 'package:audioplayers/audioplayers.dart';
+import 'package:flutter_ringtone_player/flutter_ringtone_player.dart';
 
 class AudioService {
-  final AudioPlayer _audioPlayer = AudioPlayer();
-
   Future<void> playAlarm() async {
-    await _audioPlayer.play(AssetSource('audios/alarm.mp3'));
+    FlutterRingtonePlayer().play(
+      fromAsset: 'assets/audios/alarm.mp3',
+      asAlarm: true,
+      looping: true,
+    );
   }
 
   Future<void> stopAlarm() async {
-    await _audioPlayer.stop();
+    FlutterRingtonePlayer().stop();
   }
 }
