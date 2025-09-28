@@ -3,11 +3,12 @@
 
 ## Objectives
 - To implement Onboarding screens (once-first-time)
-- To implement the Location permission prompt
+- To implement the Location permission prompt and fetch location
 - To implement Alarm/Notification setting functionality
 - To store the alarms in a local database 
 - To build a Flutter mobile platform.
 - To manage state and UI in Flutter with widgets.
+- To build an app with interactive UI
 - To integrate 3rd party libraries.
 - To work with the Dart language and Flutter’s widget tree structure.
 - To use GitHub Actions to automate building and deploying Flutter web apps to GitHub Pages.
@@ -16,18 +17,17 @@
 ## Package/Tools
 
     cupertino_icons: ^1.0.8
-    audioplayers: ^6.5.1
-    flutter_background_service: ^5.0.5
     shared_preferences: ^2.5.3
     flutter_local_notifications: ^19.4.2
+    flutter_background_service: ^5.1.0
     timezone: ^0.10.1
-    provider: ^6.1.5+1
     smooth_page_indicator: ^1.2.1
-    intl: ^0.19.0
-    geolocator: ^12.0.0
-    permission_handler: ^11.3.1
-    geocoding: ^3.0.0
+    intl: ^0.20.2
+    geolocator: ^14.0.2
+    permission_handler: ^12.0.1
+    geocoding: ^4.0.0
     video_player: ^2.8.6
+    flutter_ringtone_player: ^4.0.0+4
 
 
 ---
